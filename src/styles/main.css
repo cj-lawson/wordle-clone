@@ -66,12 +66,25 @@ h6 {
 html {
   background-color: #18181a;
   color: #fdfdfd;
+  overflow-x: hidden;
 }
 .dm-sans-large {
   font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 800;
   font-style: normal;
+}
+.dm-sans-regular {
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+nav {
+  width: 100%;
+  text-align: center;
+  padding: 20px 10px 10px 10px;
 }
 
 /* Board game */
@@ -111,4 +124,36 @@ html {
   justify-content: center;
   align-items: center;
   font-size: 2em;
+  border-radius: 2px;
+}
+.instructions {
+  display: block;
+  margin: auto;
+  margin-top: 50px;
+  width: 400px;
+  height: 450px;
+  text-align: left;
+}
+.strong {
+  font-weight: 800;
+}
+.instructions > * {
+  margin-bottom: 12px;
+}
+.example-container {
+  display: flex;
+}
+
+/* shaded tiles added with javascript */
+.shaded-tile {
+  background-color: #636265;
+}
+.correct {
+  background-color: #03c39b;
+}
+.close {
+  background-color: #f3d05a;
+}
+.wrong {
+  background-color: #111112;
 }
