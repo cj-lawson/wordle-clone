@@ -1,18 +1,39 @@
 const ROW_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
 const letters = document.querySelectorAll(".tile");
+// App state
+let currentRow = 0;
+let currentGuess = "";
+let gameOver = false;
+let wordParts = [];
+
+// Fetch a random word and update wordParts
+async function fetchAndSetWord() {
+  wordParts = await fetchRandomWord();
+}
+
+async function fetchRandomWord() {
+  try {
+    const res = await fetch(
+      "https://raw.githubusercontent.com/cj-lawson/word-api/main/words.json"
+    );
+    if (!res.ok) {
+      throw new Error("Failed to fetch words");
+    }
+    const data = await res.json();
+    const words = data.words;
+    const randomIndex = Math.floor(Math.random() * words.length);
+    const word = words[randomIndex].toUpperCase();
+    const wordParts = word.split("");
+    return wordParts;
+  } catch (error) {
+    console.error("Error fetching random word:", error);
+    return [];
+  }
+}
 
 async function init() {
-  // App state
-  let currentRow = 0;
-  let currentGuess = "";
-  let gameOver = false;
-
-  //   Fetch word of the day
-  const res = await fetch("https://words.dev-apis.com/word-of-the-day");
-  const { word: wordRes } = await res.json();
-  const word = wordRes.toUpperCase();
-  const wordParts = word.split("");
+  await fetchAndSetWord();
 
   //   Parse & Route keystrokes
   document.addEventListener("keydown", function handleKeyPress(event) {
@@ -65,7 +86,6 @@ async function init() {
     const guessLetters = currentGuess.split("");
     const map = makeMap(wordParts);
     let allRight = true;
-    console.log(wordParts);
 
     // Finds correct letters
     for (let i = 0; i < ROW_LENGTH; i++) {
@@ -96,13 +116,16 @@ async function init() {
     currentGuess = "";
 
     if (allRight) {
-      // win
-      alert("you win!");
+      // Win
+      fireConfetti();
+      modalText.innerText = "Congrats! You guessed the word correctly";
+      showModal();
       done = true;
     } else if (currentRow === MAX_ATTEMPTS) {
       // lose
-      alert(`you lose, the word was ${word}`);
-      done = true;
+      modalText.innerText = "Dang, you didn't get it this time";
+      showModal();
+      gameOver = true;
     }
   }
 }
@@ -124,6 +147,93 @@ function makeMap(array) {
   }
 
   return obj;
+}
+
+// confetti animation
+function fireConfetti() {
+  const count = 200;
+  const defaults = {
+    origin: { y: 0.7 },
+  };
+
+  function fire(particleRatio, opts) {
+    confetti({
+      ...defaults,
+      ...opts,
+      particleCount: Math.floor(count * particleRatio),
+    });
+  }
+
+  fire(0.25, {
+    spread: 26,
+    startVelocity: 55,
+  });
+  fire(0.2, {
+    spread: 60,
+  });
+  fire(0.35, {
+    spread: 100,
+    decay: 0.91,
+    scalar: 0.8,
+  });
+  fire(0.1, {
+    spread: 120,
+    startVelocity: 25,
+    decay: 0.92,
+    scalar: 1.2,
+  });
+  fire(0.1, {
+    spread: 120,
+    startVelocity: 45,
+  });
+}
+
+// Modal
+const modal = document.getElementById("winModal");
+const closeButton = document.querySelector(".close-button");
+const modalText = document.getElementById("modal-text");
+const replayButton = document.getElementById("replayButton");
+const newGameButton = document.getElementById("newGameButton");
+
+function showModal() {
+  modal.style.display = "flex";
+}
+
+closeButton.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+// Replay current game
+replayButton.addEventListener("click", () => {
+  modal.style.display = "none";
+  currentRow = 0;
+  currentGuess = "";
+  gameOver = false;
+  resetGame();
+});
+
+// new game
+newGameButton.addEventListener("click", async () => {
+  modal.style.display = "none";
+  currentRow = 0;
+  currentGuess = "";
+  gameOver = false;
+  resetGame();
+  await fetchAndSetWord();
+});
+
+// Reset Game
+function resetGame() {
+  letters.forEach((letter) => {
+    letter.innerText = "";
+    letter.classList.remove("correct", "close", "wrong", "shaded-tile");
+  });
 }
 
 init();

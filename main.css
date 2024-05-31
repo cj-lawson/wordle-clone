@@ -62,6 +62,12 @@ h6 {
   isolation: isolate;
 }
 
+button {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
 /* Global styles */
 html {
   background-color: #18181a;
@@ -78,6 +84,12 @@ html {
   font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
+  font-style: normal;
+}
+.dm-sans-medium {
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
   font-style: normal;
 }
 
@@ -161,4 +173,77 @@ a {
 }
 .wrong {
   background-color: #111112;
+}
+
+/* Modal container */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  justify-content: center; /* Centered horizontally */
+  align-items: center; /* Centered vertically */
+  /* Flexbox for centering */
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #18181a;
+  color: #fdfdfd;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #2e2e2e;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  top: 0px; /* Adjust as needed */
+  right: 12px; /* Adjust as needed */
+  color: #aaa;
+  /* float: right; */
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 16px;
+}
+#replayButton {
+  border-radius: 4px;
+  padding: 4px 16px 4px 16px;
+  margin-right: 12px;
+  background-color: #2e2e2e;
+  border: 1px solid #3e3e3e;
+  color: #fdfdfd;
+  cursor: pointer;
+}
+#newGameButton {
+  border-radius: 4px;
+  padding: 4px 16px 4px 16px;
+  margin-left: 12px;
+  background-color: #fdfdfd;
+  color: #18181a;
+  cursor: pointer;
 }
