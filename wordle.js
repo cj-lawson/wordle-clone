@@ -1,6 +1,7 @@
 const ROW_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
 const letters = document.querySelectorAll(".tile");
+
 // App state
 let currentRow = 0;
 let currentGuess = "";
